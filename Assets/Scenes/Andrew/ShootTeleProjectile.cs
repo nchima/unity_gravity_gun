@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class ShootTeleProjectile : MonoBehaviour
 {
+    public int projectileBounces;
+
+    public Transform player;
 
     public Camera firstPersonCamera; //Assign the first 
     public KeyCode shootKey = KeyCode.Mouse0; //Assign in editor what key you use to shoot the projectile.
@@ -18,22 +21,33 @@ public class ShootTeleProjectile : MonoBehaviour
 
     int layerMask = 1 << 9;
 
+
     void Start()
     {
+        //If the Camera is not assigned, check to see if this is attached to a camera.
+        if (firstPersonCamera==null)
+        {
+            print($"[{this}]: No Camera Assigned, Assigning Camera '{GetComponentInChildren<Camera>().name}' as FPS Camera...");
+            firstPersonCamera = this.gameObject.GetComponentInChildren<Camera>(); 
+        }
+        if (player == null)
+        {
+            print($"[{this}]: No Player Transform Assigned, Assigning Transform '{GetComponentInChildren<Transform>()}'");
+            player = GetComponentInChildren<Transform>();
+        }
+        //spawn in the 'gun' in the lower right hand side
         GameObject g = Instantiate(gunModel, firstPersonCamera.transform);
         hand = g.transform;
-        if (!firstPersonCamera) { firstPersonCamera = GetComponent<Camera>(); }
     }
 
     List<Vector3> trajPoints = new List<Vector3>();
-    //Vector3[] trajPoints = new Vector3[64];
     Vector3 aimDir;
 
     public Vector3 trajDest;
 
     void Update()
     {
-        if (!firstPersonCamera) { print("No Camera Assigned!"); return; }
+        if (!firstPersonCamera) { print($"No Camera Assigned to [{this}]!"); return; }
         aimDir = ((firstPersonCamera.transform.position + (firstPersonCamera.transform.forward * 99999)) - hand.transform.position).normalized;
         if (Input.GetKeyDown(shootKey)) //runs when the assigend 'shoot' key is pressed
         {
@@ -44,6 +58,7 @@ public class ShootTeleProjectile : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (!firstPersonCamera) { print($"No Camera Assigned to [{this}]!"); return; }
         Vector3 pos = hand.position;
         Vector3 vel = aimDir * projectileSpeed;
         Vector3 grav = new Vector3(0, -projectileGravity, 0) * projectileSpeed;
@@ -97,7 +112,9 @@ public class ShootTeleProjectile : MonoBehaviour
         p.GetComponent<TeleProjectileScript>().moveDirection = aimDir;
         //print(((firstPersonCamera.transform.position + (firstPersonCamera.transform.forward * 99999)) - p.transform.position).normalized);
         p.GetComponent<TeleProjectileScript>().speed = spd;
+        p.GetComponent<TeleProjectileScript>().player = player;
         p.GetComponent<TeleProjectileScript>().projectileGravity = projectileGravity;
+        p.GetComponent<TeleProjectileScript>().projectileBounces = projectileBounces;
     }
 
 

@@ -2,13 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeleProjectileScript : MonoBehaviour
+public class TeleProjectileScript : TeleportMeNow
 {
-
-    void Start()
-    {
-    
-    }
 
     public Vector3 moveDirection;
     public float speed;
@@ -22,6 +17,11 @@ public class TeleProjectileScript : MonoBehaviour
     public GameObject hitMarker;
 
     bool detected;
+
+    public Transform player;
+
+    public int projectileBounces;
+
     void FixedUpdate()
     {
         moveDirection.y -= projectileGravity * Time.fixedDeltaTime;
@@ -37,7 +37,8 @@ public class TeleProjectileScript : MonoBehaviour
                 Destroy(this.gameObject);
             }
 
-            if (hit.distance > lastHitDist) { SpawnHitMarker(lastHitPoint, lastHitNorm); Destroy(this.gameObject); }
+            if (hit.distance > lastHitDist)
+            { SpawnHitMarker(lastHitPoint, lastHitNorm); Destroy(this.gameObject); }
 
             lastHitPoint = hit.point;
             lastHitNorm = hit.normal;
@@ -52,6 +53,7 @@ public class TeleProjectileScript : MonoBehaviour
 
     void SpawnHitMarker(Vector3 pos, Vector3 normal)
     {
+        player.position = pos + normal;
         GameObject h = Instantiate(hitMarker, pos, Quaternion.identity);
         h.transform.up = normal;
     }
