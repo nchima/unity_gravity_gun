@@ -16,11 +16,13 @@ public class ShootTeleProjectile : MonoBehaviour
 
     public float projectileSpeed = 30;
     public float projectileGravity = .8f;
+    public float projectileDestroyTime = 2;
 
     Transform hand;
 
     int layerMask = 1 << 9;
 
+    public bool ableToShoot = true;
 
     void Start()
     {
@@ -49,8 +51,8 @@ public class ShootTeleProjectile : MonoBehaviour
     {
         if (!firstPersonCamera) { print($"No Camera Assigned to [{this}]!"); return; }
         aimDir = ((firstPersonCamera.transform.position + (firstPersonCamera.transform.forward * 99999)) - hand.transform.position).normalized;
-        if (Input.GetKeyDown(shootKey)) //runs when the assigend 'shoot' key is pressed
-        {
+        if (Input.GetKeyDown(shootKey) && ableToShoot) //runs when the assigend 'shoot' key is pressed
+        {           
             ShootProjectile(projectileSpeed);
         }
     }
@@ -108,13 +110,16 @@ public class ShootTeleProjectile : MonoBehaviour
 
     public void ShootProjectile(float spd)
     {
+        ableToShoot = false;
+
         GameObject p = Instantiate(projectile, hand.position, Quaternion.identity);
         p.GetComponent<TeleProjectileScript>().moveDirection = aimDir;
-        //print(((firstPersonCamera.transform.position + (firstPersonCamera.transform.forward * 99999)) - p.transform.position).normalized);
+        p.GetComponent<TeleProjectileScript>().moveDirection = aimDir;
         p.GetComponent<TeleProjectileScript>().speed = spd;
         p.GetComponent<TeleProjectileScript>().player = player;
         p.GetComponent<TeleProjectileScript>().projectileGravity = projectileGravity;
         p.GetComponent<TeleProjectileScript>().projectileBounces = projectileBounces;
+        p.GetComponent<TeleProjectileScript>().projectileDestroyTime = projectileDestroyTime;
     }
 
 

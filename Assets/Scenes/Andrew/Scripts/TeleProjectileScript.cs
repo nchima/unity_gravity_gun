@@ -21,6 +21,9 @@ public class TeleProjectileScript : TeleportMeNow
     public Transform player;
 
     public int projectileBounces;
+    public float projectileDestroyTime;
+
+    float destroyTimer;
 
     void FixedUpdate()
     {
@@ -34,20 +37,34 @@ public class TeleProjectileScript : TeleportMeNow
             if (hit.distance <= transform.localScale.x / 2)
             {
                 SpawnHitMarker(hit.point, hit.normal);
+                player.GetComponent<ShootTeleProjectile>().ableToShoot = true;
                 Destroy(this.gameObject);
             }
 
             if (hit.distance > lastHitDist)
-            { SpawnHitMarker(lastHitPoint, lastHitNorm); Destroy(this.gameObject); }
+            {
+                SpawnHitMarker(lastHitPoint, lastHitNorm);
+                player.GetComponent<ShootTeleProjectile>().ableToShoot = true;
+                Destroy(this.gameObject);
+            }
 
             lastHitPoint = hit.point;
             lastHitNorm = hit.normal;
             lastHitDist = hit.distance;
         }
-        else if(detected)
+        else if (detected)
         {
             SpawnHitMarker(lastHitPoint, lastHitNorm);
+            player.GetComponent<ShootTeleProjectile>().ableToShoot = true;
             Destroy(this.gameObject);
+        }
+        else
+        {
+            destroyTimer += Time.fixedDeltaTime;
+            if (destroyTimer>=projectileDestroyTime) {
+                player.GetComponent<ShootTeleProjectile>().ableToShoot = true;
+                Destroy(this.gameObject);
+            }
         }
     }
 
