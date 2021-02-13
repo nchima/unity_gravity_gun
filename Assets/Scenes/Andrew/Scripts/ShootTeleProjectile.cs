@@ -51,11 +51,11 @@ public class ShootTeleProjectile : MonoBehaviour
         hand = g.transform;
 
         //this creates the arc visual, showing the trajectory of the projectile
-
+        if (!GameObject.Find("TICS")) { GameObject tics = new GameObject("TICS"); tics.transform.parent = transform; }
         tics = new Transform[maxRange];
         for (int i = 0; i < maxRange; i++) //spawn in trajectory points or 'Tics'
         {
-            GameObject t = Instantiate(arcTic);
+            GameObject t = Instantiate(arcTic, GameObject.Find("TICS").transform);
             tics[i] = t.transform;
         }
 

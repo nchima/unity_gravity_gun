@@ -540,7 +540,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a116f5d70165c3d4ba88d5cd4277f261, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectileBounces: 0
   maxRange: 128
   player: {fileID: 0}
   firstPersonCamera: {fileID: 0}
@@ -551,7 +550,7 @@ MonoBehaviour:
     type: 3}
   arcTic: {fileID: 2551799615015459909, guid: baa5aecca1405e148ac1a6c836f245e2, type: 3}
   projectileSpeed: 30
-  projectileGravity: 0.8
+  projectileGravity: 1
   projectileDestroyTime: 2
   ableToShoot: 1
   trajDest: {x: 0, y: 0, z: 0}

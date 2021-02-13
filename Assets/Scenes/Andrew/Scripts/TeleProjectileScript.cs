@@ -32,6 +32,7 @@ public class TeleProjectileScript : MonoBehaviour
             detected = true; // shows if the projectile has ever detected a collider, so that if it suddenly doesnt any longer, it will destroy itself, as it has passes through a collider in this case.
             if (hit.distance <= transform.localScale.x / 2) // if hitting a wall within the radius of the projectile, teleport and destroy
             {
+                TeleportMe(lastHitPoint, lastHitNorm);
                 if (showDebugHitMarkers)
                     SpawnHitMarker(lastHitPoint, lastHitNorm);
                 player.GetComponent<ShootTeleProjectile>().ableToShoot = true;
@@ -40,6 +41,7 @@ public class TeleProjectileScript : MonoBehaviour
 
             if (hit.distance > lastHitDist)// if suddenly the distance between the course of trajectory increases instead of decreases, it has passed through a collider, and should destory itself, and teleport the player to the last point of contact
             {
+                TeleportMe(lastHitPoint, lastHitNorm);
                 if (showDebugHitMarkers)
                     SpawnHitMarker(lastHitPoint, lastHitNorm);
                 player.GetComponent<ShootTeleProjectile>().ableToShoot = true;
@@ -52,6 +54,7 @@ public class TeleProjectileScript : MonoBehaviour
         }
         else if (detected) // if the projectile detects a collider, then suddenly detects only the void, it has passed through a collider, and thouls teleport the player to the last detected point on the trajectory.
         {
+            TeleportMe(lastHitPoint, lastHitNorm);
             if (showDebugHitMarkers)
                 SpawnHitMarker(lastHitPoint, lastHitNorm);
             player.GetComponent<ShootTeleProjectile>().ableToShoot = true;
@@ -67,9 +70,13 @@ public class TeleProjectileScript : MonoBehaviour
         }
     }
 
+    void TeleportMe(Vector3 pos, Vector3 normal)
+    {
+            player.position = pos + normal;
+    }
+
     void SpawnHitMarker(Vector3 pos, Vector3 normal) //leaves a mark of where the projectile lands after destroyed [debugging purposes, but can be used to cool effect maybe]
     {
-        player.position = pos + normal;
         GameObject h = Instantiate(hitMarker, pos, Quaternion.identity);
         h.transform.up = normal;
     }
