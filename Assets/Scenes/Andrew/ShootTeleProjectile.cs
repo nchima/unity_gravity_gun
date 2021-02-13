@@ -38,6 +38,7 @@ public class ShootTeleProjectile : MonoBehaviour
     public void ShootProjectile(float spd)
     {
         GameObject p = Instantiate(projectile, hand.position, Quaternion.identity);
+        p.transform.parent = this.transform;
         p.GetComponent<TeleProjectileScript>().moveDirection = ((firstPersonCamera.transform.position + (firstPersonCamera.transform.forward * 99999)) - p.transform.position).normalized;
         //print(((firstPersonCamera.transform.position + (firstPersonCamera.transform.forward * 99999)) - p.transform.position).normalized);
         p.GetComponent<TeleProjectileScript>().speed = spd;

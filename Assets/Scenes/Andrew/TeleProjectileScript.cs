@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,10 +6,7 @@ using UnityEngine;
 public class TeleProjectileScript : MonoBehaviour
 {
 
-    void Start()
-    {
     
-    }
 
     public Vector3 moveDirection;
     public float speed;
@@ -20,6 +18,14 @@ public class TeleProjectileScript : MonoBehaviour
     float lastHitDist = 999;
 
     public GameObject hitMarker;
+
+    GameObject playerReference;
+
+    void Start()
+    {
+        playerReference = GetComponentInParent<Camera>().gameObject.GetComponentInParent<FPS_Controller>().gameObject;
+    }
+
 
     bool detected;
     void FixedUpdate()
@@ -46,8 +52,14 @@ public class TeleProjectileScript : MonoBehaviour
         else if(detected)
         {
             SpawnHitMarker(lastHitPoint, lastHitNorm);
+            TeleportPlayer(playerReference, lastHitPoint);
             Destroy(this.gameObject);
         }
+    }
+
+    void TeleportPlayer(GameObject playerReference, Vector3 lastHitPoint)
+    {
+        playerReference.transform.position = lastHitPoint;
     }
 
     void SpawnHitMarker(Vector3 pos, Vector3 normal)
