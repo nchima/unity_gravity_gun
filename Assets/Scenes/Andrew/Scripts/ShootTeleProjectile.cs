@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ShootTeleProjectile : MonoBehaviour
-{
+{  
+    public string[] tags; //a public array of tags that are valid targets for the projectile teleportation, leave blank to make it discrete;
+
     public int maxRange = 128; //the maximum range visualized by the arc
     int layerMask = 1 << 9;
 

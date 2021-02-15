@@ -4,6 +4,8 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
+  - Indicator: {fileID: 3633695818062220791, guid: cb069c64a9a5d884d8e5585668f38e82,
+      type: 3}
   - player: {instanceID: 0}
   - firstPersonCamera: {instanceID: 0}
   - gunModel: {fileID: 1426552063174414077, guid: a98c00fb08569674ea040869f3f1bd1e,
