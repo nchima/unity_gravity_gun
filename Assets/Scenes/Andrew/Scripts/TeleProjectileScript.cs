@@ -19,7 +19,18 @@ public class TeleProjectileScript : MonoBehaviour
     public Transform player;
 
     bool detected;
-    public bool showDebugHitMarkers;    
+    public bool showDebugHitMarkers;
+
+    private CameraController cameraController;
+    private float fadeTime;
+    public float timer;
+    private bool fadeScreen = false;
+
+    private void Start()
+    {
+        cameraController = Camera.main.GetComponent<CameraController>();
+        fadeTime = cameraController.GetFadeSpeed();
+    }
 
     void FixedUpdate()
     {
@@ -70,10 +81,20 @@ public class TeleProjectileScript : MonoBehaviour
         }
     }
 
+
     void TeleportPlayer(GameObject playerReference, Vector3 pos, Vector3 normal)
     {
-            playerReference.transform.position = pos + normal;
+       FadeCamera();
+       playerReference.transform.position = pos + normal;
+
     }
+
+    private void FadeCamera()
+    {
+        
+        cameraController.CameraFade();
+    }
+
 
     void SpawnHitMarker(Vector3 pos, Vector3 normal) //leaves a mark of where the projectile lands after destroyed [debugging purposes, but can be used to cool effect maybe]
     {
